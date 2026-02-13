@@ -46,6 +46,9 @@ enum AppDefaults {
 
             // Model
             "PrewarmModelOnWake": true,
+
+            // Input Gain
+            "inputGainPercent": 100,
         ])
     }
 }

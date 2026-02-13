@@ -52,6 +52,7 @@ final class StreamingTranscriptionSession: TranscriptionSession {
     private let fallbackService: TranscriptionService
     private var model: (any TranscriptionModel)?
     private var streamingFailed = false
+    private var connectionTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "com.prakashjoshipax.voiceink", category: "StreamingTranscriptionSession")
 
     init(streamingService: StreamingTranscriptionService, fallbackService: TranscriptionService) {
@@ -68,7 +69,7 @@ final class StreamingTranscriptionSession: TranscriptionSession {
             service?.sendAudioChunk(data)
         }
 
-        Task.detached { [weak self] in
+        connectionTask = Task.detached { [weak self] in
             guard let self = self else { return }
             do {
                 try await self.streamingService.startStreaming(model: model)
@@ -91,6 +92,10 @@ final class StreamingTranscriptionSession: TranscriptionSession {
         guard let model = model else {
             throw WhisperStateError.transcriptionFailed
         }
+
+        // Wait for WebSocket connection to finish before deciding the path
+        await connectionTask?.value
+        connectionTask = nil
 
         if !streamingFailed {
             do {

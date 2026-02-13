@@ -13,7 +13,8 @@ class SonioxTranscriptionService {
         let config = try getAPIConfig(for: model)
         
         let fileId = try await uploadFile(audioURL: audioURL, apiKey: config.apiKey)
-        let transcriptionId = try await createTranscription(fileId: fileId, apiKey: config.apiKey, modelName: model.name)
+        let asyncModelName = model.name == "stt-rt-v4" ? "stt-async-v4" : model.name
+        let transcriptionId = try await createTranscription(fileId: fileId, apiKey: config.apiKey, modelName: asyncModelName)
         try await pollTranscriptionStatus(id: transcriptionId, apiKey: config.apiKey)
         let transcript = try await fetchTranscript(id: transcriptionId, apiKey: config.apiKey)
         

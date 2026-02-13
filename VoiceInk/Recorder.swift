@@ -114,6 +114,11 @@ class Recorder: NSObject, ObservableObject {
             coreAudioRecorder.onAudioChunk = onAudioChunk
             recorder = coreAudioRecorder
 
+            // Set hardware mic input volume before recording
+            let gainPercent = UserDefaults.standard.integer(forKey: "inputGainPercent")
+            let volume = gainPercent > 0 ? Float(gainPercent) / 100.0 : 1.0
+            setHardwareInputVolume(volume, deviceID: deviceID)
+
             try coreAudioRecorder.startRecording(toOutputFile: url, deviceID: deviceID)
             logger.notice("startRecording: CoreAudioRecorder started successfully")
 
@@ -253,6 +258,39 @@ class Recorder: NSObject, ObservableObject {
         }
     }
     
+    // MARK: - Hardware Volume
+
+    private func setHardwareInputVolume(_ volume: Float, deviceID: AudioDeviceID) {
+        let clampedVolume = max(0.0, min(1.0, volume))
+
+        // Try master channel (0) first, then individual channels (1, 2)
+        for channel: UInt32 in [0, 1, 2] {
+            var address = AudioObjectPropertyAddress(
+                mSelector: kAudioDevicePropertyVolumeScalar,
+                mScope: kAudioObjectPropertyScopeInput,
+                mElement: channel
+            )
+
+            guard AudioObjectHasProperty(deviceID, &address) else { continue }
+
+            var vol = clampedVolume
+            let status = AudioObjectSetPropertyData(
+                deviceID,
+                &address,
+                0,
+                nil,
+                UInt32(MemoryLayout<Float>.size),
+                &vol
+            )
+
+            if status == noErr {
+                logger.notice("🎙️ Set input volume to \(clampedVolume) on channel \(channel)")
+            } else {
+                logger.warning("🎙️ Failed to set input volume on channel \(channel): \(status)")
+            }
+        }
+    }
+
     // MARK: - Cleanup
 
     deinit {
