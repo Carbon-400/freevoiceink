@@ -19,6 +19,7 @@ struct SettingsView: View {
     @AppStorage("enableAnnouncements") private var enableAnnouncements = true
     @AppStorage("restoreClipboardAfterPaste") private var restoreClipboardAfterPaste = true
     @AppStorage("clipboardRestoreDelay") private var clipboardRestoreDelay = 2.0
+    @AppStorage("inputGainPercent") private var inputGainPercent = 100
     @State private var showResetOnboardingAlert = false
     @State private var currentShortcut = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
     @State private var isCustomCancelEnabled = false
@@ -158,6 +159,15 @@ struct SettingsView: View {
                     }
                 }
 
+                // Mic Input Gain
+                Picker("Mic Input Level", selection: $inputGainPercent) {
+                    Text("30%").tag(30)
+                    Text("50%").tag(50)
+                    Text("75%").tag(75)
+                    Text("100%").tag(100)
+                }
+                .pickerStyle(.segmented)
+
                 // Restore Clipboard
                 ExpandableSettingsRow(
                     isExpanded: $isRestoreClipboardExpanded,
@@ -184,6 +194,7 @@ struct SettingsView: View {
                 Picker("Recorder Style", selection: $whisperState.recorderType) {
                     Text("Notch").tag("notch")
                     Text("Mini").tag("mini")
+                    Text("Ultra").tag("ultrasimple")
                 }
                 .pickerStyle(.segmented)
 

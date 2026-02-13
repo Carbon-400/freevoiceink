@@ -14,6 +14,11 @@ extension WhisperState {
                 notchWindowManager = NotchWindowManager(whisperState: self, recorder: recorder)
             }
             notchWindowManager?.show()
+        } else if recorderType == "ultrasimple" {
+            if ultraSimpleWindowManager == nil {
+                ultraSimpleWindowManager = UltraSimpleWindowManager(whisperState: self, recorder: recorder)
+            }
+            ultraSimpleWindowManager?.show()
         } else {
             if miniWindowManager == nil {
                 miniWindowManager = MiniWindowManager(whisperState: self, recorder: recorder)
@@ -21,10 +26,12 @@ extension WhisperState {
             miniWindowManager?.show()
         }
     }
-    
+
     func hideRecorderPanel() {
         if recorderType == "notch" {
             notchWindowManager?.hide()
+        } else if recorderType == "ultrasimple" {
+            ultraSimpleWindowManager?.hide()
         } else {
             miniWindowManager?.hide()
         }

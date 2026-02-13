@@ -38,6 +38,9 @@ class WhisperState: NSObject, ObservableObject {
                 if oldValue == "notch" {
                     notchWindowManager?.hide()
                     notchWindowManager = nil
+                } else if oldValue == "ultrasimple" {
+                    ultraSimpleWindowManager?.hide()
+                    ultraSimpleWindowManager = nil
                 } else {
                     miniWindowManager?.hide()
                     miniWindowManager = nil
@@ -102,6 +105,7 @@ class WhisperState: NSObject, ObservableObject {
     let logger = Logger(subsystem: "com.prakashjoshipax.voiceink", category: "WhisperState")
     var notchWindowManager: NotchWindowManager?
     var miniWindowManager: MiniWindowManager?
+    var ultraSimpleWindowManager: UltraSimpleWindowManager?
     
     // For model progress tracking
     @Published var downloadProgress: [String: Double] = [:]
