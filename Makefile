@@ -55,6 +55,19 @@ local: check setup
 	xcodebuild -project VoiceInk.xcodeproj -scheme VoiceInk -configuration Debug \
 		-derivedDataPath "$(LOCAL_DERIVED_DATA)" \
 		-xcconfig LocalBuild.xcconfig \
+		PRODUCT_NAME="$(APP_NAME)" \
+		INFOPLIST_KEY_CFBundleDisplayName="$(APP_NAME)" \
+		PRODUCT_BUNDLE_IDENTIFIER="$(APP_BUNDLE_ID)" \
+		-resolvePackageDependencies
+	@MEDIA_RESOURCE="$(LOCAL_DERIVED_DATA)/SourcePackages/checkouts/mediaremote-adapter/Sources/MediaRemoteAdapter/Resources/run.pl"; \
+	MEDIA_BUNDLE="$(LOCAL_DERIVED_DATA)/Build/Products/Debug/MediaRemoteAdapter_MediaRemoteAdapter.bundle"; \
+	if [ -f "$$MEDIA_RESOURCE" ]; then \
+		mkdir -p "$$MEDIA_BUNDLE"; \
+		ditto "$$MEDIA_RESOURCE" "$$MEDIA_BUNDLE/run.pl"; \
+	fi
+	xcodebuild -project VoiceInk.xcodeproj -scheme VoiceInk -configuration Debug \
+		-derivedDataPath "$(LOCAL_DERIVED_DATA)" \
+		-xcconfig LocalBuild.xcconfig \
 		CODE_SIGN_IDENTITY="-" \
 		CODE_SIGNING_REQUIRED=NO \
 		CODE_SIGNING_ALLOWED=YES \
