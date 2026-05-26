@@ -14,7 +14,7 @@ enum ViewType: String, CaseIterable, Identifiable {
     case audioInput = "Audio Input"
     case dictionary = "Dictionary"
     case settings = "Settings"
-    case license = "VoiceInk Pro"
+    case license = "RawSpeech"
 
     var id: String { rawValue }
 
@@ -89,18 +89,16 @@ struct ContentView: View {
                                 .cornerRadius(8)
                         }
 
-                        Text("VoiceInk")
+                        Text("RawSpeech")
                             .font(.system(size: 14, weight: .semibold))
 
-                        if case .licensed = licenseViewModel.licenseState {
-                            Text("PRO")
-                                .font(.system(size: 9, weight: .heavy))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color.blue)
-                                .cornerRadius(4)
-                        }
+                        Text("FREE")
+                            .font(.system(size: 9, weight: .heavy))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(Color.blue)
+                            .cornerRadius(4)
 
                         Spacer()
                     }
@@ -118,7 +116,7 @@ struct ContentView: View {
                 }
             }
             .listStyle(.sidebar)
-            .navigationTitle("VoiceInk")
+            .navigationTitle("RawSpeech")
             .navigationSplitViewColumnWidth(210)
         } detail: {
             if let selectedView = selectedView {
@@ -147,7 +145,7 @@ struct ContentView: View {
                     selectedView = .settings
                 case "AI Models":
                     selectedView = .models
-                case "VoiceInk Pro":
+                case "RawSpeech":
                     selectedView = .license
                 case "History":
                     selectedView = .history

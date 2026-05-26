@@ -215,13 +215,6 @@ class TranscriptionPipeline {
 
         if var textToPaste = finalPastedText,
            transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            if case .trialExpired = licenseViewModel.licenseState {
-                textToPaste = """
-                    Your trial has expired. Upgrade to VoiceInk Pro at tryvoiceink.com/buy
-                    \n\(textToPaste)
-                    """
-            }
-
             let appendSpace = UserDefaults.standard.bool(forKey: "AppendTrailingSpace")
             let pastedText = textToPaste + (appendSpace ? " " : "")
             _ = await CursorPaster.startPasteAtCursor(pastedText).value

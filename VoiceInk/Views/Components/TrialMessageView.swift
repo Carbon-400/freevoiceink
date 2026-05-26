@@ -36,15 +36,6 @@ struct TrialMessageView: View {
                 }
                 .buttonStyle(.bordered)
 
-                Button(action: {
-                    if let url = URL(string: "https://tryvoiceink.com/buy") {
-                        NSWorkspace.shared.open(url)
-                    }
-                }) {
-                    Text("Buy License")
-                        .font(.system(size: 13, weight: .medium))
-                }
-                .buttonStyle(.borderedProminent)
             }
         }
         .padding()
@@ -70,9 +61,9 @@ struct TrialMessageView: View {
     
     private var title: String {
         switch type {
-        case .warning: return "Trial Ending Soon"
-        case .expired: return "Trial Expired"
-        case .info: return "Trial Active"
+        case .warning: return "Notice"
+        case .expired: return "Notice"
+        case .info: return "Notice"
         }
     }
     
@@ -83,4 +74,4 @@ struct TrialMessageView: View {
         case .info: return Color.blue.opacity(0.1)
         }
     }
-} 
+}

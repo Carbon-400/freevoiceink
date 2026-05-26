@@ -1,0 +1,42 @@
+name: Build RawSpeech
+
+on:
+  push:
+    branches:
+      - main
+      - "codex/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build unsigned DMG
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Xcode
+        run: xcodebuild -version
+
+      - name: Install CMake
+        run: brew list cmake >/dev/null 2>&1 || brew install cmake
+
+      - name: Cache Whisper dependency
+        uses: actions/cache@v4
+        with:
+          path: ~/VoiceInk-Dependencies
+          key: whisper-${{ runner.os }}-${{ hashFiles('Makefile') }}
+          restore-keys: |
+            whisper-${{ runner.os }}-
+
+      - name: Build DMG
+        run: make ci
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RawSpeech-dmg
+          path: dist/RawSpeech.dmg
+          if-no-files-found: error
