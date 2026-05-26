@@ -55,7 +55,6 @@ local: check setup
 	xcodebuild -project VoiceInk.xcodeproj -scheme VoiceInk -configuration Debug \
 		-derivedDataPath "$(LOCAL_DERIVED_DATA)" \
 		-xcconfig LocalBuild.xcconfig \
-		PRODUCT_NAME="$(APP_NAME)" \
 		INFOPLIST_KEY_CFBundleDisplayName="$(APP_NAME)" \
 		PRODUCT_BUNDLE_IDENTIFIER="$(APP_BUNDLE_ID)" \
 		-resolvePackageDependencies
@@ -73,12 +72,11 @@ local: check setup
 		CODE_SIGNING_ALLOWED=YES \
 		DEVELOPMENT_TEAM="" \
 		CODE_SIGN_ENTITLEMENTS="$(CURDIR)/VoiceInk/VoiceInk.local.entitlements" \
-		PRODUCT_NAME="$(APP_NAME)" \
 		INFOPLIST_KEY_CFBundleDisplayName="$(APP_NAME)" \
 		PRODUCT_BUNDLE_IDENTIFIER="$(APP_BUNDLE_ID)" \
 		SWIFT_ACTIVE_COMPILATION_CONDITIONS='$$(inherited) LOCAL_BUILD' \
 		build
-	@APP_PATH="$(LOCAL_DERIVED_DATA)/Build/Products/Debug/$(APP_NAME).app" && \
+	@APP_PATH="$(LOCAL_DERIVED_DATA)/Build/Products/Debug/VoiceInk.app" && \
 	if [ -d "$$APP_PATH" ]; then \
 		echo "Copying $(APP_NAME).app to ~/Downloads..."; \
 		rm -rf "$$HOME/Downloads/$(APP_NAME).app"; \
